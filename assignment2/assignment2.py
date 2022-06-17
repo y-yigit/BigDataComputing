@@ -194,7 +194,7 @@ def arg_parser():
                         help='File name for the CSV file')
     server_args.add_argument('--chunks', type=int, required=False,
                         help='Number of chunks used to divide the workload')
-    server_args.add_argument('FastQFile', type=str, help='A FastQ file')
+    server_args.add_argument('FastQFile', type=str, nargs='?', help='A FastQ file')
     client_args = parser.add_argument_group(title="Arguments when run in client mode")
     client_args.add_argument("-n", action="store",
                              dest="n", required=False, type=int,
