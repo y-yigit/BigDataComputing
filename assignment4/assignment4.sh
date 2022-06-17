@@ -1,4 +1,10 @@
 #!/bin/bash
-data='test.fa'
 
-parallel --sshloginfile hosts.txt --results outdir python3 assignment4.py $data ::: 1 2 3 4 5 
+# Find the multiple input files first
+
+data_dir=/data/dataprocessing/rnaseq_data/Brazil_Brain/
+files= find $data_dir -name '*.fastq' -o -name '*.fastq' 
+
+# assignment4.py returns stdout.write(string)
+# find a way to save this output
+echo $files | parallel -j 2 --sshloginfile hosts.txt --results outdir "python3 assignment4.py {}" 
