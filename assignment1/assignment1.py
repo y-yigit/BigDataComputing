@@ -10,10 +10,12 @@ The scores are written to a csv file, named by the user
 Usage: python3 assignment1.py -n <aantal_cpus> [OPTIONEEL: -o <output csv file>]
        fastabestand1.fastq [fastabestand2.fastq ... fastabestandN.fastq]
 
+This script is an improvement of my assignment 1 from last year
+It can be used as module in assignment 2
 """
 
 __author__ = "Yaprak Yigit"
-__version__ = "1.0"
+__version__ = "2.0"
 
 
 import sys
@@ -26,7 +28,7 @@ class FastQC:
     """
     This class contains methods that can process a FastQ file
     It is able to divide the file into parts, read the data
-    ,convert the quality scores into PHRED scores and write
+    , convert the quality scores into PHRED scores and write
     these scores to a csv file
     """
 
@@ -36,7 +38,6 @@ class FastQC:
 
         Parameters:
             n_proc (int): Number of processes
-            mp_dict (Dict): Multiprocessing dictionary
             fastq_file (String): A FastQ file
         """
         self.fastq_file = fastq_file
@@ -75,27 +76,24 @@ class FastQC:
         of the line containing the quality values.
 
         Parameters:
-            file_parts(list): A list containing tuples of end and start positions.
+            file_parts(list): A list containing tuples of start and end positions.
 
         Return:
-            ascii_list (list): A list containing all the ascii scores in a line
+            phred_dict (dict): A dictionary with as key the sequence position
+                               And lists with multiple phred scores as values
         """
-        (start, end) = file_parts
         phred_dict = {}
 
         print("Calculating PHRED scores from {} in byte range {}"
               .format(self.fastq_file, file_parts))
         with open(self.fastq_file) as file_obj:
-            file_obj.seek(start)
+            file_obj.seek(file_parts[0])
             line = file_obj.readline()
             while line.startswith("+") == False and \
-                    line.startswith("-") == False and file_obj.tell() < end:
+                    line.startswith("-") == False and file_obj.tell() < file_parts[1]:
                 line = file_obj.readline()
-                # In the event that the line is already line 3
-                if line.startswith("+") or line.startswith("-"):
-                    break
             count = 3
-            while line and file_obj.tell() < end:
+            while line and file_obj.tell() < file_parts[1]:
                 count += 1
                 line = file_obj.readline()
                 if count % 4 == 0:
@@ -118,11 +116,12 @@ class FastQC:
 
         Parameters:
             results (List): List of dictionaries
-            queue_dictionary (Boolean): False unless it is run via process
+            queue_dictionary (Boolean): Should be false unless it is run via process
         """
         combined_dict = {}
         for result_dictionary in results:
             if queue_dictionary == True:
+                # This allows me to import in assignment 2
                 result_dictionary = result_dictionary['result']
             for key, value in result_dictionary.items():
                 if key in combined_dict:
@@ -139,7 +138,10 @@ class FastQC:
         to a CSV file
         The user can only choose the filename, not the path
 
-        optional_name (String): Optional argument used in naming the csv file
+        Parameters
+            phred_dict (dict): A dictionary with as key the sequence position
+                               And lists with multiple
+            optional_name (String): Optional argument used in naming the csv file
         """
         if outfile == None:
             outfile = self.fastq_file + "outfile.csv"
