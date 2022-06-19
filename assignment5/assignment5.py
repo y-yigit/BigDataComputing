@@ -29,6 +29,7 @@ __author__ = "Yaprak Yigit"
 __version__ = "1.0"
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import countDistinct, col, split
 from pyspark.sql.types import *
 
 spark = SparkSession.builder.getOrCreate()
@@ -48,7 +49,7 @@ schema = StructType([
     StructField("start", IntegerType(), True),
     StructField("stop", IntegerType(), True),
     StructField("score", FloatType(), True),
-    # Cannot be BoolType()
+    # Boolean but cannot be BoolType()
     StructField("status", StringType(), True),
     # Not the correct format for DataType()
     StructField("date", StringType(), True),
@@ -61,6 +62,35 @@ schema = StructType([
 # Create a spark data frame
 df = spark.read.csv(input_file, sep="\t", header=False, schema=schema)
 
-# Show the first five rows and get the amount of columns
-df.show(5)
-print(len(df.columns))
+# Question one and two
+n_uniq_prot_acc = df.select(countDistinct("protein_accession"))
+question_one = n_uniq_prot_acc.collect()[0][0]
+question_two = round(df.count() / question_one, 2)
+
+# Question three
+raw_go_counts = df.groupby('go_annotations').count()
+go_counts = raw_go_counts.sort(col("count").desc()).\
+    where(raw_go_counts.go_annotations != "-").na.drop()
+question_three = go_counts.collect()[0][0]
+
+# Question four
+df = df.withColumn('Result', (df['stop'] - df['start']))
+average_length = df.select('Result').agg({"Result": "avg"})
+question_four = round(average_length.collect()[0][0], 2)
+
+# Question five
+raw_prot_counts = df.groupby('protein_accession').count()
+prot_counts = raw_prot_counts.sort(col("count").desc()).na.drop()
+question_five = [prot_counts.collect()[row][0] for row in range(10)]
+
+# Question six
+# E-value is maximum strength of association
+# It should be < 0.01 for homology
+e_value_filtered_counts = df.where(df.score<=0.01).groupby('protein_accession').count()
+filtered_prot_counts = e_value_filtered_counts.sort(col("count").desc()).na.drop()
+question_six = [filtered_prot_counts.collect()[row][0] for row in range(10)]
+
+# Question seven
+all_words = df.select("interpro_annotations_description").where(df.interpro_annotations_description != "-").na.drop()
+#split_col = split(all_words['interpro_annotations_description'], ' ')
+#split_col.select('interpro_annotations_description').show()
