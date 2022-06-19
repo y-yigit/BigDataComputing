@@ -29,7 +29,7 @@ __author__ = "Yaprak Yigit"
 __version__ = "1.0"
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import countDistinct, col, split
+from pyspark.sql.functions import countDistinct, col, split, explode
 from pyspark.sql.types import *
 
 spark = SparkSession.builder.getOrCreate()
@@ -90,7 +90,21 @@ e_value_filtered_counts = df.where(df.score<=0.01).groupby('protein_accession').
 filtered_prot_counts = e_value_filtered_counts.sort(col("count").desc()).na.drop()
 question_six = [filtered_prot_counts.collect()[row][0] for row in range(10)]
 
-# Question seven
+# Question seven and eight
 all_words = df.select("interpro_annotations_description").where(df.interpro_annotations_description != "-").na.drop()
-#split_col = split(all_words['interpro_annotations_description'], ' ')
-#split_col.select('interpro_annotations_description').show()
+count_all_words = all_words.withColumn('interpro_annotations_description',explode(split('interpro_annotations_description', ' ')))
+most_common = count_all_words.groupby("interpro_annotations_description").count().sort(col("count").desc()).na.drop()
+least_common = count_all_words.groupby("interpro_annotations_description").count().sort(col("count").asc()).na.drop()
+
+question_seven = [most_common.collect()[row][0] for row in range(10)]
+question_eight = [least_common.collect()[row][0] for row in range(10)]
+
+# Question nine
+filtered_df = df.select("interpro_annotations_description").filter(df.protein_accession.isin(question_six)==True).where(df.interpro_annotations_description != "-").na.drop()
+words_in_top_ten = filtered_df.withColumn('interpro_annotations_description',explode(split('interpro_annotations_description', ' ')))
+most_common_top_ten = words_in_top_ten.groupby("interpro_annotations_description").count().sort(col("count").desc()).na.drop()
+question_nine = [most_common_top_ten.collect()[row][0] for row in range(10)]
+
+# Question 10
+question_ten = round(df.stat.corr("score", "Result"), 2)
+print(question_ten)
