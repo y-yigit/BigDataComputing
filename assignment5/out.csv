@@ -1,0 +1,207 @@
+Question	Answer	Plan
+1	468	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) HashAggregate(keys=[], functions=[count(distinct protein_accession#0)])
+   +- ShuffleQueryStage 1
+      +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [id=#62]
+         +- *(2) HashAggregate(keys=[], functions=[partial_count(distinct protein_accession#0)])
+            +- *(2) HashAggregate(keys=[protein_accession#0], functions=[])
+               +- AQEShuffleRead coalesced
+                  +- ShuffleQueryStage 0
+                     +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#36]
+                        +- *(1) HashAggregate(keys=[protein_accession#0], functions=[])
+                           +- FileScan csv [protein_accession#0] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<protein_accession:string>
++- == Initial Plan ==
+   HashAggregate(keys=[], functions=[count(distinct protein_accession#0)])
+   +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [id=#21]
+      +- HashAggregate(keys=[], functions=[partial_count(distinct protein_accession#0)])
+         +- HashAggregate(keys=[protein_accession#0], functions=[])
+            +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#17]
+               +- HashAggregate(keys=[protein_accession#0], functions=[])
+                  +- FileScan csv [protein_accession#0] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<protein_accession:string>
+
+"
+2	11.4	Same as question one
+3	GO:0003677	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#76L DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#76L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#194]
+            +- *(2) Filter atleastnnonnulls(2, go_annotations#13, count#76L)
+               +- *(2) HashAggregate(keys=[go_annotations#13], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(go_annotations#13, 200), ENSURE_REQUIREMENTS, [id=#157]
+                           +- *(1) HashAggregate(keys=[go_annotations#13], functions=[partial_count(1)])
+                              +- *(1) Filter (isnotnull(go_annotations#13) AND NOT (go_annotations#13 = -))
+                                 +- FileScan csv [go_annotations#13] Batched: false, DataFilters: [isnotnull(go_annotations#13), NOT (go_annotations#13 = -)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(go_annotations), Not(EqualTo(go_annotations,-))], ReadSchema: struct<go_annotations:string>
++- == Initial Plan ==
+   Sort [count#76L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(count#76L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#138]
+      +- Filter atleastnnonnulls(2, go_annotations#13, count#76L)
+         +- HashAggregate(keys=[go_annotations#13], functions=[count(1)])
+            +- Exchange hashpartitioning(go_annotations#13, 200), ENSURE_REQUIREMENTS, [id=#134]
+               +- HashAggregate(keys=[go_annotations#13], functions=[partial_count(1)])
+                  +- Filter (isnotnull(go_annotations#13) AND NOT (go_annotations#13 = -))
+                     +- FileScan csv [go_annotations#13] Batched: false, DataFilters: [isnotnull(go_annotations#13), NOT (go_annotations#13 = -)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(go_annotations), Not(EqualTo(go_annotations,-))], ReadSchema: struct<go_annotations:string>
+
+"
+4	131.26	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(2) HashAggregate(keys=[], functions=[avg(Result#84)])
+   +- ShuffleQueryStage 0
+      +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [id=#240]
+         +- *(1) HashAggregate(keys=[], functions=[partial_avg(Result#84)])
+            +- *(1) Project [(stop#7 - start#6) AS Result#84]
+               +- FileScan csv [start#6,stop#7] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<start:int,stop:int>
++- == Initial Plan ==
+   HashAggregate(keys=[], functions=[avg(Result#84)])
+   +- Exchange SinglePartition, ENSURE_REQUIREMENTS, [id=#228]
+      +- HashAggregate(keys=[], functions=[partial_avg(Result#84)])
+         +- Project [(stop#7 - start#6) AS Result#84]
+            +- FileScan csv [start#6,stop#7] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<start:int,stop:int>
+
+"
+5	['gi|29896138|gb|AAP09419.1|', 'gi|29898886|gb|AAP12157.1|', 'gi|29896135|gb|AAP09416.1|', 'gi|29897114|gb|AAP10391.1|', 'gi|29894408|gb|AAP07698.1|', 'gi|29899051|gb|AAP12322.1|', 'gi|29894342|gb|AAP07633.1|', 'gi|29897715|gb|AAP10990.1|', 'gi|29898818|gb|AAP12090.1|', 'gi|29896503|gb|AAP09782.1|']	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#132L DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#132L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#328]
+            +- *(2) Filter atleastnnonnulls(2, protein_accession#0, count#132L)
+               +- *(2) HashAggregate(keys=[protein_accession#0], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#293]
+                           +- *(1) HashAggregate(keys=[protein_accession#0], functions=[partial_count(1)])
+                              +- FileScan csv [protein_accession#0] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<protein_accession:string>
++- == Initial Plan ==
+   Sort [count#132L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(count#132L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#277]
+      +- Filter atleastnnonnulls(2, protein_accession#0, count#132L)
+         +- HashAggregate(keys=[protein_accession#0], functions=[count(1)])
+            +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#273]
+               +- HashAggregate(keys=[protein_accession#0], functions=[partial_count(1)])
+                  +- FileScan csv [protein_accession#0] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct<protein_accession:string>
+
+"
+6	['gi|29896138|gb|AAP09419.1|', 'gi|29896135|gb|AAP09416.1|', 'gi|29899051|gb|AAP12322.1|', 'gi|29898233|gb|AAP11506.1|', 'gi|29893849|gb|AAP07141.1|', 'gi|29898369|gb|AAP11642.1|', 'gi|29897591|gb|AAP10867.1|', 'gi|29895488|gb|AAP08775.1|', 'gi|29898827|gb|AAP12098.1|', 'gi|29893912|gb|AAP07204.1|']	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#156L DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#156L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#437]
+            +- *(2) Filter atleastnnonnulls(2, protein_accession#0, count#156L)
+               +- *(2) HashAggregate(keys=[protein_accession#0], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#398]
+                           +- *(1) HashAggregate(keys=[protein_accession#0], functions=[partial_count(1)])
+                              +- *(1) Project [protein_accession#0]
+                                 +- *(1) Filter (isnotnull(score#8) AND (score#8 <= 0.01))
+                                    +- FileScan csv [protein_accession#0,score#8] Batched: false, DataFilters: [isnotnull(score#8), (score#8 <= 0.01)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(score), LessThanOrEqual(score,0.01)], ReadSchema: struct<protein_accession:string,score:float>
++- == Initial Plan ==
+   Sort [count#156L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(count#156L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#376]
+      +- Filter atleastnnonnulls(2, protein_accession#0, count#156L)
+         +- HashAggregate(keys=[protein_accession#0], functions=[count(1)])
+            +- Exchange hashpartitioning(protein_accession#0, 200), ENSURE_REQUIREMENTS, [id=#372]
+               +- HashAggregate(keys=[protein_accession#0], functions=[partial_count(1)])
+                  +- Project [protein_accession#0]
+                     +- Filter (isnotnull(score#8) AND (score#8 <= 0.01))
+                        +- FileScan csv [protein_accession#0,score#8] Batched: false, DataFilters: [isnotnull(score#8), (score#8 <= 0.01)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(score), LessThanOrEqual(score,0.01)], ReadSchema: struct<protein_accession:string,score:float>
+
+"
+7	['domain', 'superfamily', 'protein', 'C-terminal', 'site', 'family', 'DNA-binding', 'hydrolase', 'N-terminal', 'conserved']	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#172L DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#172L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#555]
+            +- *(2) Filter atleastnnonnulls(2, interpro_annotations_description#168, count#172L)
+               +- *(2) HashAggregate(keys=[interpro_annotations_description#168], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(interpro_annotations_description#168, 200), ENSURE_REQUIREMENTS, [id=#516]
+                           +- *(1) HashAggregate(keys=[interpro_annotations_description#168], functions=[partial_count(1)])
+                              +- *(1) Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#168]
+                                 +- *(1) Filter ((isnotnull(interpro_annotations_description#12) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                                    +- FileScan csv [interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), NOT (interpro_annotations_description#12 = -), a..., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), Not(EqualTo(interpro_annotations_description,-))], ReadSchema: struct<interpro_annotations_description:string>
++- == Initial Plan ==
+   Sort [count#172L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(count#172L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#494]
+      +- Filter atleastnnonnulls(2, interpro_annotations_description#168, count#172L)
+         +- HashAggregate(keys=[interpro_annotations_description#168], functions=[count(1)])
+            +- Exchange hashpartitioning(interpro_annotations_description#168, 200), ENSURE_REQUIREMENTS, [id=#490]
+               +- HashAggregate(keys=[interpro_annotations_description#168], functions=[partial_count(1)])
+                  +- Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#168]
+                     +- Filter ((isnotnull(interpro_annotations_description#12) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                        +- FileScan csv [interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), NOT (interpro_annotations_description#12 = -), a..., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), Not(EqualTo(interpro_annotations_description,-))], ReadSchema: struct<interpro_annotations_description:string>
+
+"
+8	['6-phospho-N-acetylmuramidase', 'VII', 'hydratase', 'PGP', 'RecG', 'coenzyme', 'ArtM/GltK/GlnP/TcyL/YhdX-like', 'two', 'component', 'decarboxylase']	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#179L ASC NULLS FIRST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#179L ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [id=#673]
+            +- *(2) Filter atleastnnonnulls(2, interpro_annotations_description#168, count#179L)
+               +- *(2) HashAggregate(keys=[interpro_annotations_description#168], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(interpro_annotations_description#168, 200), ENSURE_REQUIREMENTS, [id=#634]
+                           +- *(1) HashAggregate(keys=[interpro_annotations_description#168], functions=[partial_count(1)])
+                              +- *(1) Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#168]
+                                 +- *(1) Filter ((isnotnull(interpro_annotations_description#12) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                                    +- FileScan csv [interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), NOT (interpro_annotations_description#12 = -), a..., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), Not(EqualTo(interpro_annotations_description,-))], ReadSchema: struct<interpro_annotations_description:string>
++- == Initial Plan ==
+   Sort [count#179L ASC NULLS FIRST], true, 0
+   +- Exchange rangepartitioning(count#179L ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [id=#612]
+      +- Filter atleastnnonnulls(2, interpro_annotations_description#168, count#179L)
+         +- HashAggregate(keys=[interpro_annotations_description#168], functions=[count(1)])
+            +- Exchange hashpartitioning(interpro_annotations_description#168, 200), ENSURE_REQUIREMENTS, [id=#608]
+               +- HashAggregate(keys=[interpro_annotations_description#168], functions=[partial_count(1)])
+                  +- Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#168]
+                     +- Filter ((isnotnull(interpro_annotations_description#12) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                        +- FileScan csv [interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), NOT (interpro_annotations_description#12 = -), a..., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), Not(EqualTo(interpro_annotations_description,-))], ReadSchema: struct<interpro_annotations_description:string>
+
+"
+9	['domain', 'superfamily', 'C-terminal', 'Pyruvate', 'bacterial-type', 'histidine', 'transduction', 'Signal', 'RNA', 'domain,']	"== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(3) Sort [count#197L DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 1
+         +- Exchange rangepartitioning(count#197L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#791]
+            +- *(2) Filter atleastnnonnulls(2, interpro_annotations_description#193, count#197L)
+               +- *(2) HashAggregate(keys=[interpro_annotations_description#193], functions=[count(1)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 0
+                        +- Exchange hashpartitioning(interpro_annotations_description#193, 200), ENSURE_REQUIREMENTS, [id=#750]
+                           +- *(1) HashAggregate(keys=[interpro_annotations_description#193], functions=[partial_count(1)])
+                              +- *(1) Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#193]
+                                 +- *(1) Project [interpro_annotations_description#12]
+                                    +- *(1) Filter (((isnotnull(interpro_annotations_description#12) AND protein_accession#0 IN (gi|29896138|gb|AAP09419.1|,gi|29896135|gb|AAP09416.1|,gi|29899051|gb|AAP12322.1|,gi|29898233|gb|AAP11506.1|,gi|29893849|gb|AAP07141.1|,gi|29898369|gb|AAP11642.1|,gi|29897591|gb|AAP10867.1|,gi|29895488|gb|AAP08775.1|,gi|29898827|gb|AAP12098.1|,gi|29893912|gb|AAP07204.1|)) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                                       +- FileScan csv [protein_accession#0,interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), protein_accession#0 IN (gi|29896138|gb|AAP09419...., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), In(protein_accession, [gi|29893849|gb|AAP07141.1|,g..., ReadSchema: struct<protein_accession:string,interpro_annotations_description:string>
++- == Initial Plan ==
+   Sort [count#197L DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(count#197L DESC NULLS LAST, 200), ENSURE_REQUIREMENTS, [id=#725]
+      +- Filter atleastnnonnulls(2, interpro_annotations_description#193, count#197L)
+         +- HashAggregate(keys=[interpro_annotations_description#193], functions=[count(1)])
+            +- Exchange hashpartitioning(interpro_annotations_description#193, 200), ENSURE_REQUIREMENTS, [id=#721]
+               +- HashAggregate(keys=[interpro_annotations_description#193], functions=[partial_count(1)])
+                  +- Generate explode(split(interpro_annotations_description#12,  , -1)), false, [interpro_annotations_description#193]
+                     +- Project [interpro_annotations_description#12]
+                        +- Filter (((isnotnull(interpro_annotations_description#12) AND protein_accession#0 IN (gi|29896138|gb|AAP09419.1|,gi|29896135|gb|AAP09416.1|,gi|29899051|gb|AAP12322.1|,gi|29898233|gb|AAP11506.1|,gi|29893849|gb|AAP07141.1|,gi|29898369|gb|AAP11642.1|,gi|29897591|gb|AAP10867.1|,gi|29895488|gb|AAP08775.1|,gi|29898827|gb|AAP12098.1|,gi|29893912|gb|AAP07204.1|)) AND NOT (interpro_annotations_description#12 = -)) AND atleastnnonnulls(1, interpro_annotations_description#12))
+                           +- FileScan csv [protein_accession#0,interpro_annotations_description#12] Batched: false, DataFilters: [isnotnull(interpro_annotations_description#12), protein_accession#0 IN (gi|29896138|gb|AAP09419...., Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/ubuntu/Desktop/Minor_DataMining/BigDataComputing/assignment..., PartitionFilters: [], PushedFilters: [IsNotNull(interpro_annotations_description), In(protein_accession, [gi|29893849|gb|AAP07141.1|,g..., ReadSchema: struct<protein_accession:string,interpro_annotations_description:string>
+
+"
+10	0.071	The explain function doesn't work for the function corr
