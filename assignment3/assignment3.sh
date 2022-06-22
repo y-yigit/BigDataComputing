@@ -1,4 +1,4 @@
-#!/bin/bash -i
+#!/bin/bash
 ##############################
 #        Yaprak Yigit        #
 #        Assignment3         #
@@ -30,11 +30,9 @@
 source /commons/conda/conda_load.sh
 
 # File locations
-index=../Data/reference.fa
-data=../Data/sequence.fa
+index=$( realpath "$0"  ) && /data/dataprocessing/MinIONData/all_bacteria.fna "$index"
+data=$( realpath "$0"  ) && /data/dataprocessing/MinIONData/all.fq "$data"
 
-
-# srun for execution in real time
 # The output goes to /dev/null
-srun /usr/bin/time -o timings.txt --append -f "${n}\t%e" minimap2 -N $n+1 -a $index $data  > /dev/null > log.txt
+/usr/bin/time -o timings.txt --append -f "${n}\t%e" minimap2 -N "$n"+1 -a $index $data > "/dev/null" 2> log.txt
 
