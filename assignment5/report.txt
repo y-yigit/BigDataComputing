@@ -1,0 +1,4 @@
+Report for Assignment 5 start evaluation at do 23 jun 2022 11:01:17 CEST with options /data/dataprocessing/interproscan/all_bacilli.tsv
+
+No output in CSV file or stdout found!
+***ASSIGNMENT {assignment} STATUS: FAILED at  do 23 jun 2022 11:02:12 CEST
