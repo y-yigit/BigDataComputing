@@ -27,8 +27,8 @@ import csv
 class FastQC:
     """
     This class contains methods that can process a FastQ file
-    It is able to divide the file into parts, read the data
-    , convert the quality scores into PHRED scores and write
+    It is able to divide the file into parts, read the data,
+    convert the quality scores into PHRED scores and write
     these scores to a csv file
     """
 
