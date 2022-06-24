@@ -136,17 +136,18 @@ class FastQC:
         """
         Writes the multiprocessing dictionary from the class
         to a CSV file
-        The user can only choose the filename, not the path
 
         Parameters
             phred_dict (dict): A dictionary with as key the sequence position
                                And lists with multiple
             optional_name (String): Optional argument used in naming the csv file
         """
+        # If the filename contains a path, python will try to write to that location
+        head, tail = os.path.split(self.fastq_file)
         if outfile == None:
-            outfile = self.fastq_file + "outfile.csv"
+            outfile = tail + "outfile.csv"
         else:
-            outfile = self.fastq_file + outfile
+            outfile = tail + outfile
         with open(outfile, 'w', newline='') as csvfile:
             # Use csv writer
             spamwriter = csv.writer(csvfile, delimiter=',')
