@@ -1,0 +1,21 @@
+ ************* Module assignment1
+ assignment1.py:59: refactor (R1722, consider-using-sys-exit, FastQC.__split_file__) Consider using sys.exit()
+ assignment1.py:87: convention (C0209, consider-using-f-string, FastQC.__read_file__) Formatting a regular string which could be a f-string
+ assignment1.py:89: warning (W1514, unspecified-encoding, FastQC.__read_file__) Using open without explicitly specifying an encoding
+ assignment1.py:92: convention (C0121, singleton-comparison, FastQC.__read_file__) Comparison 'line.startswith('+') == False' should be 'line.startswith('+') is False' if checking for the singleton value False, or 'not line.startswith('+')' if testing for falsiness
+ assignment1.py:93: convention (C0121, singleton-comparison, FastQC.__read_file__) Comparison 'line.startswith('-') == False' should be 'line.startswith('-') is False' if checking for the singleton value False, or 'not line.startswith('-')' if testing for falsiness
+ assignment1.py:107: convention (C0209, consider-using-f-string, FastQC.__read_file__) Formatting a regular string which could be a f-string
+ assignment1.py:123: convention (C0121, singleton-comparison, FastQC.__calculate_averages__) Comparison 'queue_dictionary == True' should be 'queue_dictionary is True' if checking for the singleton value True, or 'queue_dictionary' if testing for truthiness
+ assignment1.py:132: warning (W0631, undefined-loop-variable, FastQC.__calculate_averages__) Using possibly undefined loop variable 'result_dictionary'
+ assignment1.py:126: warning (W0612, unused-variable, FastQC.__calculate_averages__) Unused variable 'value'
+ assignment1.py:112: refactor (R0201, no-self-use, FastQC.__calculate_averages__) Method could be a function
+ assignment1.py:146: convention (C0121, singleton-comparison, FastQC.__csv_writer__) Comparison 'outfile == None' should be 'outfile is None'
+ assignment1.py:150: warning (W1514, unspecified-encoding, FastQC.__csv_writer__) Using open without explicitly specifying an encoding
+ assignment1.py:155: convention (C0209, consider-using-f-string, FastQC.__csv_writer__) Formatting a regular string which could be a f-string
+ assignment1.py:156: convention (C0209, consider-using-f-string, FastQC.__csv_writer__) Formatting a regular string which could be a f-string
+ assignment1.py:27: refactor (R0903, too-few-public-methods, FastQC) Too few public methods (0/2)
+ 
+ ------------------------------------------------------------------
+ Your code has been rated at 8.17/10 (previous run: 8.67/10, -0.50)
+ 
+ 
