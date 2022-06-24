@@ -10,8 +10,8 @@ It should be run as server first
 The parameters differ per mode
 
 Server mode: python3 assignment1.py -s --chunks <chunks>
-            <FastQ file> [optional: -o <output csv file>]
-            <host> <port>
+            [optional: -o <output csv file>]
+            <host> <port> <FastQ file>
 
 Client mode: python3 assignment1.py -c -n <cores> <host> <port>
 """
@@ -133,8 +133,11 @@ def runclient(num_processes, host, port):
         job_q = manager.get_job_q()
         result_q = manager.get_result_q()
         run_workers(job_q, result_q, num_processes)
-    except Exception as error:
-        print(error, "\nIs the server also running?")
+    except ConnectionRefusedError as con_error:
+        print(con_error, "\nIs the server also running on the same host/port?")
+        sys.exit()
+    except TypeError as type_error:
+        print(type_error, "\nSpecify the amount of cores for the client")
         sys.exit()
 
 
