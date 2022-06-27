@@ -1,0 +1,7 @@
+************* Module assignment4
+assignment4.py:31:9: W1514: Using open without explicitly specifying an encoding (unspecified-encoding)
+assignment4.py:81:10: C0209: Formatting a regular string which could be a f-string (consider-using-f-string)
+
+-------------------------------------------------------------------
+Your code has been rated at 9.46/10 (previous run: 10.00/10, -0.54)
+

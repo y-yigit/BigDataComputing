@@ -1,0 +1,2 @@
+Report for Assignment 4 start evaluation at ma 27 jun 2022 13:05:13 CEST with options: None
+***ASSIGNMENT {assignment} STATUS: PASSED at  ma 27 jun 2022 13:07:00 CEST
