@@ -1,3 +1,2 @@
-Report for Assignment 3 start evaluation at vr 24 jun 2022 12:25:26 CEST with options: None
-timings.txt is missing! 
-***ASSIGNMENT {assignment} STATUS: FAILED at  vr 24 jun 2022 12:25:26 CEST
+Report for Assignment 3 start evaluation at ma 27 jun 2022 16:08:15 CEST with options: None
+***ASSIGNMENT {assignment} STATUS: PASSED at  ma 27 jun 2022 16:08:15 CEST
